@@ -11,25 +11,44 @@ project(courseSelection LANGUAGES CXX)
 add_executable(courseSelection
     #math.cpp                              # 模块实现单元
     main.cpp
-    teacher.cppm
-    score.cppm
-    secretary.cppm
-    person.cppm
-    course.cppm
-    student.cppm
+
 )
 
-set(MODULE_INTERFACE_FILES
-    #${MODULE_LIB_DIR1}/utils.cppm         #添加模块库的模块接口单元
-    #math.cppm                             # 模块接口单元
+# 领域层/实体类
+set(ENTITY_MODULE
+
+    entity/entity.cppm
+    entity/teacher.cppm
+    entity/score.cppm
+    entity/secretary.cppm
+    entity/person.cppm
+    entity/course.cppm
+    entity/student.cppm
 )
 
-source_group("Module Interfaces" FILES ${MODULE_INTERFACE_FILES})
+# 数据管理层
+set(DATAMANAGEMENT_MODULE
+
+    dataManagement/courseDatabase.cppm
+    dataManagement/studentDatabase.cppm
+    dataManagement/teacherDatabase.cppm
+    dataManagement/secretaryDatabase.cppm
+    dataManagement/scoreDatabase.cppm
+)
+
+source_group("entity" FILES ${ENTITY_MODULE})
+source_group("dataManage" FILES ${DATAMANAGEMENT_MODULE})
+
+
+#source_group("Module Interfaces" FILES ${MODULE_INTERFACE_FILES})
+
 target_sources(courseSelection  PRIVATE FILE_SET cxx_modules TYPE CXX_MODULES
     BASE_DIRS                              # 配置BASE_DIRS，用于组织构建输出目录，以便构建不同目录中(同名的)模块文件.
         #${MODULE_LIB_DIR1}
         ${CMAKE_CURRENT_SOURCE_DIR}
-    FILES ${MODULE_INTERFACE_FILES}
+    FILES
+        ${ENTITY_MODULE}             #实体类模块存放的文件
+        ${DATAMANAGEMENT_MODULE}     #数据管理层
 )
 target_compile_features(courseSelection PRIVATE cxx_std_23)
 

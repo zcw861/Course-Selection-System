@@ -4,9 +4,10 @@
 // Description:
 // a secretary class
 
-export module selection:secretary;
+export module cs:entity.secretary;
 
 import std;
+import :entity.person;
 
 using std::string;
 

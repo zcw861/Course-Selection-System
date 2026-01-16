@@ -4,7 +4,7 @@
 // Description:
 // a person class
 
-export module selection:person;
+export module cs:entity.person;
 
 import std;
 
