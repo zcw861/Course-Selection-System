@@ -9,3 +9,6 @@ version 0.1.1 JiangFan
     修改了对模块的命名和模块文件的分类
     将readme.txt内容放到了readme.md（之前没看到）
     将实体类都放在了单独的文件中。
+
+version 0.1.2 JiangFan
+    实体类功能全部完成，增加了一些函数接口，Course的修改学分时间地点的函数(modifyCTL)、老师注册课程

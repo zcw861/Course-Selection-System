@@ -26,8 +26,10 @@ public:
     string infoId();
     //获取课程名
     string infoName();
-    //课程时间地点学分
+    //修改学分、时间、地点
     string infoCTL();
+    //修改学分、时间、地点
+    bool modifyCTL(double credit, string time, string location);
     //处理选课请求
     bool acceptEnrollment(shared_ptr<Student> student);
     //处理退课请求
@@ -74,6 +76,30 @@ bool Course::hasId(string id){
 string Course::infoCTL()
 {
     return std::format("学分：{}, 时间：{}, 地点：{}", m_credit, m_time, m_location);
+}
+
+bool Course::modifyCTL(double credit, string time, string location)
+{
+    //为学分设置了个大致的范围
+    if (credit < 0 || credit > 10)
+    {
+        print("错误：学分应该在（0,10）区间范围内！\n");
+        return false;
+    }
+
+    //输入信息均不为空（就不考虑更细致的问题了）
+    if (time.empty() || location.empty())
+    {
+        print("错误：时间或地点不能为空！\n");
+        return false;
+    }
+
+    m_credit = credit;
+    m_time = time;
+    m_location = location;
+
+    print("修改成功！\n");
+    return true;
 }
 
 

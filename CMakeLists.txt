@@ -14,6 +14,12 @@ add_executable(courseSelection
 
 )
 
+
+# CS大模块：包含： 交互分区（表现层） 、应用逻辑分区 、数据管理分区、实体类分区（领域层）
+set(CS_MODULE
+    cs.cppm
+)
+
 # 领域层/实体类
 set(ENTITY_MODULE
 
@@ -29,6 +35,7 @@ set(ENTITY_MODULE
 # 数据管理层
 set(DATAMANAGEMENT_MODULE
 
+    dataManagement/database.cppm
     dataManagement/courseDatabase.cppm
     dataManagement/studentDatabase.cppm
     dataManagement/teacherDatabase.cppm
@@ -38,7 +45,7 @@ set(DATAMANAGEMENT_MODULE
 
 source_group("entity" FILES ${ENTITY_MODULE})
 source_group("dataManage" FILES ${DATAMANAGEMENT_MODULE})
-
+source_group("sc" FILES ${CS_MODULE})
 
 #source_group("Module Interfaces" FILES ${MODULE_INTERFACE_FILES})
 
@@ -47,8 +54,10 @@ target_sources(courseSelection  PRIVATE FILE_SET cxx_modules TYPE CXX_MODULES
         #${MODULE_LIB_DIR1}
         ${CMAKE_CURRENT_SOURCE_DIR}
     FILES
+        ${CS_MODULE}
         ${ENTITY_MODULE}             #实体类模块存放的文件
         ${DATAMANAGEMENT_MODULE}     #数据管理层
+
 )
 target_compile_features(courseSelection PRIVATE cxx_std_23)
 

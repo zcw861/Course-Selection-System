@@ -10,18 +10,21 @@ import std;
 import :entity.person;
 
 using std::string;
+using std::print;
+using std::shared_ptr;
+using std::cin;
+
+class Course;
 
 export class Secretary : public Person
 {
 public:
     explicit Secretary(string id, string name);
-    bool schedulingCourse(string courseId, string teacherId);
+    //排课
+    bool schedulingCourse(std::weak_ptr<Course> course);
 };
 
 Secretary::Secretary(string id, string name)
     : Person(id, name)
 {}
 
-bool Secretary::schedulingCourse(string courseId, string teacherId)
-{
-}

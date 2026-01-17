@@ -6,12 +6,12 @@
 
 export module cs:entity;
 
-import :entity.course;
-import :entity.person;
-import :entity.score;
-import :entity.secretary;
-import :entity.student;
-import :entity.teacher;
+export import :entity.course;
+export import :entity.person;
+export import :entity.score;
+export import :entity.secretary;
+export import :entity.student;
+export import :entity.teacher;
 
 
 /*********************Course module 的实现****************************/
@@ -186,8 +186,17 @@ void Teacher::markGrade(shared_ptr<Student> student)
 
 }
 
+//查看学生的成绩单
 void Teacher::checkStudentResult(shared_ptr<Student> student)
 {
+    //感觉上一层才需要关注是不是空指针,保险点，判断一下
+    if (!student)
+    {
+        print("错误：未找到该学生！");
+        return;
+    }
+
+
 
 }
 
@@ -229,11 +238,87 @@ void Course::roster()
     }
 }
 
+//创建课程操作
+shared_ptr<Course> Teacher::assignCourse(string name, string id, int capacity)
+{
+    //时间、地点交给秘书来排
+    auto course = std::make_shared<Course>(name, id, 0.0, capacity, "", "");
+
+    if (course)
+    {
+        //存入课表
+        _courses.push_back(course);
+        print("操作成功: {}老师创建课程：\n 课程名：{} ID：{} 容量： {}\n",
+                        this->m_pname, name, id, capacity);
+        print("注意：时间、地点、学分 请等待教学秘书排课补充！\n");
+    }
+    else
+        print("错误：课程创建失败！\n");
+
+    return course;
+
+}
 
 
+/*********************secretary module 的实现****************************/
 
+//排课
+bool Secretary::schedulingCourse(weak_ptr<Course> course)
+{
+    //没有
+    //转化
+    auto c_ptr = course.lock();
 
+    if (!c_ptr)
+    {
+        print("错误：未找到该课程！\n");
+        return false;
+    }
 
+    //开始排课
+
+    //时间或地点已经有过的情况
+    bool isChange = false;
+    char temp = ' ';
+    if (!c_ptr->infoCTL().empty())
+    {
+        print("之前已保存过相应信息：\n");
+        print("{}\n", c_ptr->infoCTL());
+        print("是否进行修改?(y/n)\n");
+
+        while(temp != 'y' && temp != 'Y' && temp != 'n' && temp != 'N')
+        {
+            cin >> temp;
+            if (temp == 'y' || temp == 'Y')
+            {
+                isChange = true;
+                break;
+            }
+            else if (temp == 'n' || temp == 'N')
+                break;
+            else
+                print("错误：请输入正确的选项！\n");
+        }
+    }
+
+    if (!isChange) return true;
+
+    // 开始修改学分、时间、地点
+    double credit = 0.0;
+    string time = "";
+    string location = "";
+
+    print("请输入课程学分（0-10）： ");
+    cin >> credit;
+    print("请输入课程时间(例如：周一 3-4节)");
+    cin >> time;
+    print("请输入课程地点（如：致用楼105）");
+    cin >> location;
+
+    //调用相关函数(专门设置的bool类型)
+    return c_ptr->modifyCTL(credit, time, location);
+
+}
 
 
 
