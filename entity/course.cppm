@@ -29,7 +29,7 @@ public:
     //修改学分、时间、地点
     string infoCTL();
     //修改学分、时间、地点
-    bool modifyCTL(double credit, string time, string location);
+    bool modifyTL(string time, string location);
     //处理选课请求
     bool acceptEnrollment(shared_ptr<Student> student);
     //处理退课请求
@@ -38,6 +38,8 @@ public:
     void roster();
     //找课
     bool hasId(string id);
+    //给课程添加老师
+    bool addTeacher(shared_ptr<Teacher> teacher);
 
 private:
     string m_courseId;
@@ -78,15 +80,8 @@ string Course::infoCTL()
     return std::format("学分：{}, 时间：{}, 地点：{}", m_credit, m_time, m_location);
 }
 
-bool Course::modifyCTL(double credit, string time, string location)
+bool Course::modifyTL(string time, string location)
 {
-    //为学分设置了个大致的范围
-    if (credit < 0 || credit > 10)
-    {
-        print("错误：学分应该在（0,10）区间范围内！\n");
-        return false;
-    }
-
     //输入信息均不为空（就不考虑更细致的问题了）
     if (time.empty() || location.empty())
     {
@@ -94,7 +89,6 @@ bool Course::modifyCTL(double credit, string time, string location)
         return false;
     }
 
-    m_credit = credit;
     m_time = time;
     m_location = location;
 

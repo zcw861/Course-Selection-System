@@ -45,8 +45,6 @@ Student::Student(string id, string name)
 {}
 
 
-
-
 bool Student::hasId(string id)
 {
     return id == m_pid;

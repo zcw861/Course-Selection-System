@@ -12,3 +12,6 @@ version 0.1.1 JiangFan
 
 version 0.1.2 JiangFan
     实体类功能全部完成，增加了一些函数接口，Course的修改学分时间地点的函数(modifyCTL)、老师注册课程
+
+version 0.1.3 JiangFan
+    修改了部分实体类的接口极其功能实现，主要是老师教授课程、教学秘书排课。且把Course的modifyCTL、函数修改为modifyTL,只修改时间地点。修改了类图(实体类部分)。

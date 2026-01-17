@@ -18,7 +18,7 @@ using std::cin;
 using std::print;
 using std::vector;
 
-export class Teacher : public Person
+export class Teacher : public Person, public std::enable_shared_from_this<Teacher>
 {
 public:
     explicit Teacher(string id, string name);
@@ -29,7 +29,8 @@ public:
     //打印该老师负责的学生名单
     void printStudentRoster(shared_ptr<Course> course);
     //注册课程
-    shared_ptr<Course> assignCourse(string name, string id, int capacity = 30);
+    void assignCourse(shared_ptr<Course> course);
+
 
 private:
 

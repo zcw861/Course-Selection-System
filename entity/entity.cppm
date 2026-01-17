@@ -96,6 +96,29 @@ string Score::infoStudentId()
     return std::format("{}", studentId);
 }
 
+//给课程添加老师
+bool Course::addTeacher(shared_ptr<Teacher> teacher)
+{
+    if (!teacher)
+        return false;
+
+    //已经在课程中
+    for (auto& t: _teacher)
+    {
+        //转化
+        auto t_ptr = t.lock();
+        if (t_ptr && t_ptr->infoId() == teacher->infoId())
+        {
+            print("错误：{}老师已经有{}这个课程了，无需重复添加！\n", teacher->infoName(), this->infoName());
+            return false;
+        }
+    }
+
+    //添加到课程中
+    _teacher.push_back(teacher);
+    return true;
+}
+
 
 /*********************student module 的实现****************************/
 
@@ -238,29 +261,31 @@ void Course::roster()
     }
 }
 
-//创建课程操作
-shared_ptr<Course> Teacher::assignCourse(string name, string id, int capacity)
+//注册课程操作
+void Teacher::assignCourse(shared_ptr<Course> course)
 {
-    //时间、地点交给秘书来排
-    auto course = std::make_shared<Course>(name, id, 0.0, capacity, "", "");
-
-    if (course)
+    //上一层会判空，最好是 OvO
+    if (!course)
     {
-        //存入课表
-        _courses.push_back(course);
-        print("操作成功: {}老师创建课程：\n 课程名：{} ID：{} 容量： {}\n",
-                        this->m_pname, name, id, capacity);
-        print("注意：时间、地点、学分 请等待教学秘书排课补充！\n");
+        print("错误：未找到该课程！\n");
+        return;
     }
-    else
-        print("错误：课程创建失败！\n");
 
-    return course;
+    //成功
+    if (course->addTeacher(shared_from_this()))
+    {
+        print("成功：{}负责教授{}课程。\n", infoName(), course->infoName());
+        _courses.push_back(course);
+        return;
+    }
+
+    print("错误：{}老师添加{}课程失败！\n", infoName(), course->infoName());
 
 }
 
 
 /*********************secretary module 的实现****************************/
+
 
 //排课
 bool Secretary::schedulingCourse(weak_ptr<Course> course)
@@ -277,49 +302,43 @@ bool Secretary::schedulingCourse(weak_ptr<Course> course)
 
     //开始排课
 
-    //时间或地点已经有过的情况
+    //显示当前的课程信息
+    print("课程: {}, ID: {}, {}\n", c_ptr->infoName(), c_ptr->infoId(), c_ptr->infoCTL());
+    print("是否需要修改？(Y/N): ");
+
     bool isChange = false;
     char temp = ' ';
-    if (!c_ptr->infoCTL().empty())
-    {
-        print("之前已保存过相应信息：\n");
-        print("{}\n", c_ptr->infoCTL());
-        print("是否进行修改?(y/n)\n");
 
-        while(temp != 'y' && temp != 'Y' && temp != 'n' && temp != 'N')
+    while (1)
+    {
+        cin >> temp;
+        if (temp == 'Y' || temp == 'y')
         {
-            cin >> temp;
-            if (temp == 'y' || temp == 'Y')
-            {
-                isChange = true;
-                break;
-            }
-            else if (temp == 'n' || temp == 'N')
-                break;
-            else
-                print("错误：请输入正确的选项！\n");
+            isChange = true;
+            break;
         }
+        else if (temp == 'N' || temp == 'n')
+            break;
+        else
+            print("请输入正确的选项（Y/N）！\n");
     }
 
+    //就算不改，也算排课成功
     if (!isChange) return true;
 
-    // 开始修改学分、时间、地点
-    double credit = 0.0;
+    // 开始修改时间、地点
     string time = "";
     string location = "";
 
-    print("请输入课程学分（0-10）： ");
-    cin >> credit;
     print("请输入课程时间(例如：周一 3-4节)");
     cin >> time;
     print("请输入课程地点（如：致用楼105）");
     cin >> location;
 
     //调用相关函数(专门设置的bool类型)
-    return c_ptr->modifyCTL(credit, time, location);
+    return c_ptr->modifyTL(time, location);
 
 }
-
 
 
 
