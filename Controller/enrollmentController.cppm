@@ -1,54 +1,66 @@
 // Module
-// File: enrollmentController.cppm    Version: 0.1.0  Lincense: AGPLv3
+// File: enrollmentController.cppm    Version: 0.1.0  License: AGPLv3
 // Created: ChengWei Zhou       2026-01-13 20:11:34
 // Description:
 //  Student Course Selection
 
-export module Controller:Enrollenmet;
+export module cs:controller.enrollment;
 
 import std;
+import :entity.student;
+import :entity.course;
+import :entity.teacher;
 
-class Student;
-class Teacher;
-class Secretary;
-class Course;
-class Score;
+
+using std::string;
+using std::shared_ptr;
 
 
 export class EnrollmentController {
 public:
     EnrollmentController(
-        const std::vector<std::shared_ptr<Student>>& students,
-        const std::vector<std::shared_ptr<Teacher>>& teachers,
-        const std::vector<std::shared_ptr<Secretary>>& secretaries
-    );
+        const std::vector<shared_ptr<Student>> &students,
+        const std::vector<shared_ptr<Teacher>> &teachers,
+        const std::vector<shared_ptr<Course>> &courses
+        );
 
-    void enroll(std::shared_ptr<Student> student, std::shared_ptr<Course> course);
-    void drop(std::shared_ptr<Student> student, std::shared_ptr<Course> course);
+    bool enrollCourse(shared_ptr<Student> student, shared_ptr<Course> course);
+    bool dropCourse(shared_ptr<Student> student, shared_ptr<Course> course);
+    std::shared_ptr<Course> findCourseById(string courseId);
+    std::shared_ptr<Student> findStudentById(string studentId);
+
 
 private:
     std::vector<std::shared_ptr<Student>> _students;
     std::vector<std::shared_ptr<Teacher>> _teachers;
-    std::vector<std::shared_ptr<Secretary>> _secretaries;
+    std::vector<std::shared_ptr<Course>> _courses;
 };
 
 
 EnrollmentController::EnrollmentController(
     const std::vector<std::shared_ptr<Student>>& students,
     const std::vector<std::shared_ptr<Teacher>>& teachers,
-    const std::vector<std::shared_ptr<Secretary>>& secretaries)
-    : _students(students), _teachers(teachers), _secretaries(secretaries) {}
+    const std::vector<std::shared_ptr<Course>> &courses)
+    : _students(students), _teachers(teachers),_courses(courses) {}
 
-void EnrollmentController::enroll(std::shared_ptr<Student> student, std::shared_ptr<Course> course) {
-    if (!student || !course) throw std::invalid_argument("Student or Course is null.");
-    // 假设 Student 有 addCourse 方法
-    student->addCourse(course);
-    std::cout << "[EnrollmentController] Student enrolled in course.\n";
+bool EnrollmentController::enrollCourse(std::shared_ptr<Student> student, std::shared_ptr<Course> course) {
+
 }
 
-void EnrollmentController::drop(std::shared_ptr<Student> student, std::shared_ptr<Course> course) {
-    if (!student || !course) throw std::invalid_argument("Student or Course is null.");
-    // 假设 Student 有 removeCourse 方法
-    student->removeCourse(course);
-    std::cout << "[EnrollmentController] Student dropped course.\n";
+bool EnrollmentController::dropCourse(std::shared_ptr<Student> student, std::shared_ptr<Course> course) {
+
+}
+
+std::shared_ptr<Course> EnrollmentController::findCourseById(string courseId) {
+    for (auto course : _courses) {
+        if (course->hasId(courseId)) return course;
+    }
+    return nullptr;
+}
+
+std::shared_ptr<Student> EnrollmentController::findStudentById(string studentId) {
+    for (auto student : _students) {
+        if (student->hasId(studentId)) return student;
+    }
+    return nullptr;
 }
