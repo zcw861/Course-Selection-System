@@ -23,8 +23,8 @@ public:
         const std::vector<std::shared_ptr<Score>>& scores
     );
 
-    bool gradeStdent(string studentId,string courseId,double grade);
-    std::vector<Score> getStudentTranscript();
+    bool gradeStudent(string studentId,string courseId,double grade);
+    std::vector<weak_ptr<Score>> getStudentTranscript();
 
 private:
     std::vector<std::shared_ptr<Student>> _students;
@@ -42,10 +42,14 @@ ScoreController::ScoreController(
     const std::vector<std::shared_ptr<Score>>& scores)
     : _students(students), _teachers(teachers), _secretaries(secretaries),_scores(scores) {}
 
-std::vector<Score> ScoreController::getStudentTranscript() {
-
+std::vector<weak_ptr<Score>> ScoreController::getStudentTranscript() {
+    std::vector<weak_ptr<Score>> scores;
+    for (auto score : _scores) {
+        scores.push_back(score);
+    }
+    return scores;
 }
 
-bool ScoreController::gradeStdent(string studentId, string courseId, double grade) {
+bool ScoreController::gradeStudent(string studentId, string courseId, double grade) {
 
 }

@@ -24,11 +24,10 @@ public:
         const std::vector<shared_ptr<Course>> &courses
         );
 
-    bool enrollCourse(shared_ptr<Student> student, shared_ptr<Course> course);
-    bool dropCourse(shared_ptr<Student> student, shared_ptr<Course> course);
-    std::shared_ptr<Course> findCourseById(string courseId);
-    std::shared_ptr<Student> findStudentById(string studentId);
-
+    bool enrollCourse(const string &studentId, const string &courseId);
+    bool dropCourse(const string &studentId, const string &courseId);
+    std::shared_ptr<Course> findCourseById(const string &courseId);
+    std::shared_ptr<Student> findStudentById(const string &studentId);
 
 private:
     std::vector<std::shared_ptr<Student>> _students;
@@ -43,22 +42,36 @@ EnrollmentController::EnrollmentController(
     const std::vector<std::shared_ptr<Course>> &courses)
     : _students(students), _teachers(teachers),_courses(courses) {}
 
-bool EnrollmentController::enrollCourse(std::shared_ptr<Student> student, std::shared_ptr<Course> course) {
+bool EnrollmentController::enrollCourse(const string &studentId, const string &courseId) {
+    auto student = findStudentById(studentId);
+    auto course = findCourseById(courseId);
 
+    if (student && course) {
+        student->enrollsIn(course);
+        return true;
+    }
+    return false;
 }
 
-bool EnrollmentController::dropCourse(std::shared_ptr<Student> student, std::shared_ptr<Course> course) {
+bool EnrollmentController::dropCourse(const string &studentId, const string &courseId) {
+    auto student = findStudentById(studentId);
+    auto course = findCourseById(courseId);
 
+    if (student && course) {
+        student->dropCourse(course);
+        return true;
+    }
+    return false;
 }
 
-std::shared_ptr<Course> EnrollmentController::findCourseById(string courseId) {
+std::shared_ptr<Course> EnrollmentController::findCourseById(const string &courseId) {
     for (auto course : _courses) {
         if (course->hasId(courseId)) return course;
     }
     return nullptr;
 }
 
-std::shared_ptr<Student> EnrollmentController::findStudentById(string studentId) {
+std::shared_ptr<Student> EnrollmentController::findStudentById(const string &studentId) {
     for (auto student : _students) {
         if (student->hasId(studentId)) return student;
     }
