@@ -21,7 +21,8 @@ public:
         const std::vector<std::shared_ptr<Secretary>> &secretaries
     );
 
-    void createCourse();
+    void initializeCourse();
+    void createCourse(string name,string id, double credit, double capacity, string time = "0", string location = "0");
     bool attributeTeacher(const string &teacherId, const string &courseId);
     shared_ptr<Teacher> findTeacherById(string teacherId);
     shared_ptr<Course> findCourseById(string courseId);
@@ -40,7 +41,7 @@ CourseController::CourseController(
     : _courses(courses), _teachers(teachers), _secretaries(secretaries) {}
 
 
-void CourseController::createCourse() {
+void CourseController::initializeCourse() {
     _courses.push_back(std::make_shared<Course> ("计算机组成原理","CS101",4,60,"0","0"));
     _courses.push_back(std::make_shared<Course> ("计算机网络","CS102",4,70,"0","0"));
     _courses.push_back(std::make_shared<Course> ("数据结构","CS103",5,65,"0","0"));
@@ -48,11 +49,22 @@ void CourseController::createCourse() {
     _courses.push_back(std::make_shared<Course> ("软件构建与实现","CS105",5,70,"0","0"));
 }
 
+void CourseController::createCourse(string name, string id, double credit, double capacity, string time, string location) {
+    _courses.push_back(std::make_shared<Course> (name,id,credit,capacity,time,location));
+}
+
 
 bool CourseController::attributeTeacher(const string &teacherId, const string &courseId) {
     auto teacher = findTeacherById(teacherId);
     auto course = findCourseById(courseId);
-    teacher->assginCourse(course);
+
+    // 检查指针是否有效
+    if (!teacher || !course) {
+        return false; // 或抛出异常
+    }
+
+    teacher->assignCourse(course);
+    return true;
 }
 
 shared_ptr<Teacher> CourseController::findTeacherById(string teacherId) {
