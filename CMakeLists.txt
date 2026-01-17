@@ -43,9 +43,20 @@ set(DATAMANAGEMENT_MODULE
     dataManagement/scoreDatabase.cppm
 )
 
+# 应用逻辑层
+set(APPLICATIONLOGIC_MODULE
+
+    Controller/ct.cppm
+    Controller/courseController.cppm
+    Controller/enrollmentController.cppm
+    Controller/scoreController.cppm
+)
+
+
 source_group("entity" FILES ${ENTITY_MODULE})
 source_group("dataManage" FILES ${DATAMANAGEMENT_MODULE})
 source_group("sc" FILES ${CS_MODULE})
+source_group("logic" FILES ${APPLICATIONLOGIC_MODULE})
 
 #source_group("Module Interfaces" FILES ${MODULE_INTERFACE_FILES})
 
@@ -57,6 +68,7 @@ target_sources(courseSelection  PRIVATE FILE_SET cxx_modules TYPE CXX_MODULES
         ${CS_MODULE}
         ${ENTITY_MODULE}             #实体类模块存放的文件
         ${DATAMANAGEMENT_MODULE}     #数据管理层
+        ${APPLICATIONLOGIC_MODULE}
 
 )
 target_compile_features(courseSelection PRIVATE cxx_std_23)
