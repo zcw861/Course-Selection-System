@@ -3,6 +3,7 @@
 // Created: JiangFan       2026-01-09 14:27:01
 // Description:
 //  this is a course class
+    // Chengwei Zhou: 添加了一些info函数
 
 export module cs:entity.course;
 
@@ -23,9 +24,13 @@ export class Course: public std::enable_shared_from_this<Course>
 public:
     explicit Course(string name, string id, double credit, int capacity ,string time, string location);
     //获取课程id
-    string infoId();
+    string infoId()const;
     //获取课程名
-    string infoName();
+    string infoName()const;
+    string infoCredit()const;
+    string infoCapacity()const;
+    string infoTime()const;
+    string infoLocation()const;
     //修改学分、时间、地点
     string infoCTL();
     //修改学分、时间、地点
@@ -60,14 +65,30 @@ Course::Course(string name, string id, double credit, int capacity ,string time,
 {}
 
 
-string Course::infoId()
+string Course::infoId()const
 {
     return std::format("{}", m_courseId);
 }
 
-string Course::infoName()
+string Course::infoName()const
 {
     return std::format("{}", m_courseName);
+}
+
+string Course::infoCredit() const {
+    return std::format("{}", m_credit);
+}
+
+string Course::infoCapacity() const {
+    return std::format("{}", m_capacity);
+}
+
+string Course::infoTime() const {
+    return std::format("{}", m_time);
+}
+
+string Course::infoLocation() const {
+    return std::format("{}", m_location);
 }
 
 
