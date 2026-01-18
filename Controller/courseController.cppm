@@ -10,7 +10,6 @@
 //          [v0.1.2] 周城伟 3269038743@qq.com   2026-01-18 23:30:46
 //          *注释了老师绑定课程的函数
 
-
 export module cs:controller.course;
 
 import std;
