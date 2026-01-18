@@ -5,15 +5,10 @@
 //
 //     [v0.1.2] 何志远 3270883879@qq.com   2026-01-17 16:36:40
 //         * 更改代码结构，连接postgresql数据库，数据类基本实现
-module;
-
-#include <pqxx/pqxx>
-#include <memory>
-#include <vector>
-#include <string>
 
 export module cs:database.student;
 
+import  <pqxx/pqxx>;
 import std;
 import :entity;
 import :database.course;
