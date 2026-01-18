@@ -1,8 +1,9 @@
-// Module
+﻿// Module
 // File: score.cppm    Version: 0.1.0  Lincense: AGPLv3
 // Created: JiangFan       2026-01-09 18:09:35
 // Description:
 // a score class
+
 
 export module cs:entity.score;
 import std;
@@ -20,9 +21,9 @@ export class Score
 public:
     explicit Score(weak_ptr<Course> course, weak_ptr<Student> student, double grade = 0);
 
-    double infoGrade();
-    string infoCourse();
-    string infoStudentId();
+    double infoGrade() const;
+    string infoCourse() const;
+    string infoStudentId() const;
     void modifyGrade(double g);
 
 private:
@@ -33,7 +34,7 @@ private:
 
 
 
-double Score::infoGrade()
+double Score::infoGrade() const
 {
     return m_grade;
 }
@@ -54,3 +55,6 @@ void Score::modifyGrade(double g)
 
     m_grade = g;
 }
+
+
+

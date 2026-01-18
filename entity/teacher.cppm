@@ -4,6 +4,7 @@
 // Description:
 // a teacher class
 
+
 export module cs:entity.teacher;
 
 import std;
@@ -30,7 +31,8 @@ public:
     void printStudentRoster(shared_ptr<Course> course);
     //注册课程
     void assignCourse(shared_ptr<Course> course);
-
+    //
+    bool hasId(string id);
 
 private:
 
@@ -42,3 +44,11 @@ private:
 Teacher::Teacher(string id, string name)
     : Person(id, name)
 {}
+
+bool Teacher::hasId(string id)
+{
+    return id == m_pid;
+}
+
+
+

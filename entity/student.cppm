@@ -4,6 +4,7 @@
 // Description:
 // a student class
 
+
 export module cs:entity.student;
 
 import std;
@@ -49,4 +50,5 @@ bool Student::hasId(string id)
 {
     return id == m_pid;
 }
+
 
