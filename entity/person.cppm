@@ -4,6 +4,8 @@
 // Description:
 // a person class
 
+
+
 export module cs:entity.person;
 
 import std;
@@ -14,8 +16,8 @@ export class Person
 {
 public:
     explicit Person(string id, string name);
-    string infoId();
-    string infoName();
+    string infoId() const;
+    string infoName() const;
 
 protected:
     string m_pid;
@@ -26,12 +28,12 @@ Person::Person(string id, string name)
     :m_pid(id), m_pname(name)
 {}
 
-string Person::infoId()
+string Person::infoId() const
 {
     return std::format("{}", m_pid);
 }
 
-string Person::infoName()
+string Person::infoName() const
 {
     return std::format("{}", m_pname);
 }

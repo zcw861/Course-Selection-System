@@ -17,11 +17,10 @@
 import std;
 import cs;
 
+
 int main()
 {
-    std::cout << "hello, world" << std::endl;
-    std::println("hello, C++");
-
-    return 0;
+    UI system;
+    return system.exec();
 }
 

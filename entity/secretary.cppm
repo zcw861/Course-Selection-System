@@ -14,6 +14,7 @@ using std::print;
 using std::shared_ptr;
 using std::cin;
 
+
 class Course;
 
 export class Secretary : public Person
@@ -27,4 +28,6 @@ public:
 Secretary::Secretary(string id, string name)
     : Person(id, name)
 {}
+
+
 
