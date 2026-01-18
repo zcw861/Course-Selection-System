@@ -4,6 +4,9 @@
 // Description:
 //  Grade Calculation and Release
 
+//          [v0.1.1] 周城伟 3269038743@qq.com   2026-01-18 14:54:31
+//          *使用数据层接口，通过单例模式实现数据持久化
+
 export module cs:controller.score;
 
 import std;
@@ -12,44 +15,57 @@ import :entity.student;
 import :entity.secretary;
 import :entity.score;
 
+import :database.student;
+import :database.score;
+import :database.course;
+
 using std::string;
+using std::shared_ptr;
+using std::weak_ptr;
 
 export class ScoreController {
 public:
-    ScoreController(
-        const std::vector<std::shared_ptr<Student>>& students,
-        const std::vector<std::shared_ptr<Teacher>>& teachers,
-        const std::vector<std::shared_ptr<Secretary>>& secretaries,
-        const std::vector<std::shared_ptr<Score>>& scores
-    );
-
-    bool gradeStudent(string studentId,string courseId,double grade);
-    std::vector<weak_ptr<Score>> getStudentTranscript();
-
-private:
-    std::vector<std::shared_ptr<Student>> _students;
-    std::vector<std::shared_ptr<Teacher>> _teachers;
-    std::vector<std::shared_ptr<Secretary>> _secretaries;
-    std::vector<std::shared_ptr<Score>> _scores;
-
+    bool gradeStudent(string studentId, string courseId, double grade);
+    std::vector<weak_ptr<Score>> getStudentTranscript(const string& studentId) const;
 };
 
 
-ScoreController::ScoreController(
-    const std::vector<std::shared_ptr<Student>>& students,
-    const std::vector<std::shared_ptr<Teacher>>& teachers,
-    const std::vector<std::shared_ptr<Secretary>>& secretaries,
-    const std::vector<std::shared_ptr<Score>>& scores)
-    : _students(students), _teachers(teachers), _secretaries(secretaries),_scores(scores) {}
+std::vector<weak_ptr<Score>>
+ScoreController::getStudentTranscript(const string& studentId) const {
+    std::vector<shared_ptr<Score>> scores;
+    std::vector<weak_ptr<Score>> result;
 
-std::vector<weak_ptr<Score>> ScoreController::getStudentTranscript() {
-    std::vector<weak_ptr<Score>> scores;
-    for (auto score : _scores) {
-        scores.push_back(score);
-    }
-    return scores;
+    ScoreDatabase::singleton().findScoresByStudentId(studentId, scores);
+
+    for (auto& score : scores)
+        result.emplace_back(score);
+
+    return result;
 }
 
-bool ScoreController::gradeStudent(string studentId, string courseId, double grade) {
 
+bool ScoreController::gradeStudent(
+    string studentId,
+    string courseId,
+    double grade
+) {
+    shared_ptr<Student> student;
+    shared_ptr<Course> course;
+
+    if (!StudentDatabase::singleton().findStudentById(studentId, student))
+        return false;
+
+    if (!CourseDatabase::singleton().findCourseById(courseId, course))
+        return false;
+
+    auto score = std::make_shared<Score>(
+        weak_ptr<Course>(course),
+        weak_ptr<Student>(student),
+        grade
+    );
+
+    // 只负责协调，存储交给数据库
+    return ScoreDatabase::singleton().saveScore(*score);
 }
+
+

@@ -4,12 +4,17 @@
 // Description:
 //  Student Course Selection
 
+//          [v0.1.1] 周城伟 3269038743@qq.com   2026-01-18 14:05:48
+//          *使用数据层接口，通过单例模式实现数据持久化
+
 export module cs:controller.enrollment;
 
 import std;
 import :entity.student;
 import :entity.course;
 import :entity.teacher;
+import :database.student;
+import :database.course;
 
 
 using std::string;
@@ -18,62 +23,41 @@ using std::shared_ptr;
 
 export class EnrollmentController {
 public:
-    EnrollmentController(
-        const std::vector<shared_ptr<Student>> &students,
-        const std::vector<shared_ptr<Teacher>> &teachers,
-        const std::vector<shared_ptr<Course>> &courses
-        );
-
     bool enrollCourse(const string &studentId, const string &courseId);
     bool dropCourse(const string &studentId, const string &courseId);
-    std::shared_ptr<Course> findCourseById(const string &courseId);
-    std::shared_ptr<Student> findStudentById(const string &studentId);
-
-private:
-    std::vector<std::shared_ptr<Student>> _students;
-    std::vector<std::shared_ptr<Teacher>> _teachers;
-    std::vector<std::shared_ptr<Course>> _courses;
 };
 
-
-EnrollmentController::EnrollmentController(
-    const std::vector<std::shared_ptr<Student>>& students,
-    const std::vector<std::shared_ptr<Teacher>>& teachers,
-    const std::vector<std::shared_ptr<Course>> &courses)
-    : _students(students), _teachers(teachers),_courses(courses) {}
-
 bool EnrollmentController::enrollCourse(const string &studentId, const string &courseId) {
-    auto student = findStudentById(studentId);
-    auto course = findCourseById(courseId);
+    std::shared_ptr<Student> student;
+    std::shared_ptr<Course> course;
 
-    if (student && course) {
-        student->enrollsIn(course);
-        return true;
-    }
-    return false;
+    if (!StudentDatabase::singleton().findStudentById(studentId, student))
+        return false;
+
+    if (!CourseDatabase::singleton().findCourseById(courseId, course))
+        return false;
+
+    // 业务逻辑
+    course->acceptEnrollment(student);
+
+    // 持久化
+    StudentDatabase::singleton().saveEnrollment(studentId, courseId);
+    return true;
 }
 
 bool EnrollmentController::dropCourse(const string &studentId, const string &courseId) {
-    auto student = findStudentById(studentId);
-    auto course = findCourseById(courseId);
+    std::shared_ptr<Student> student;
+    std::shared_ptr<Course> course;
 
-    if (student && course) {
-        student->dropCourse(course);
-        return true;
-    }
-    return false;
+    if (!StudentDatabase::singleton().findStudentById(studentId, student))
+        return false;
+
+    if (!CourseDatabase::singleton().findCourseById(courseId, course))
+        return false;
+
+    course->acceptWithdraw(student);
+
+    StudentDatabase::singleton().removeEnrollment(studentId, courseId);
+    return true;
 }
 
-std::shared_ptr<Course> EnrollmentController::findCourseById(const string &courseId) {
-    for (auto course : _courses) {
-        if (course->hasId(courseId)) return course;
-    }
-    return nullptr;
-}
-
-std::shared_ptr<Student> EnrollmentController::findStudentById(const string &studentId) {
-    for (auto student : _students) {
-        if (student->hasId(studentId)) return student;
-    }
-    return nullptr;
-}
