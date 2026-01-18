@@ -20,6 +20,7 @@ using std::string;
 using std::print;
 using std::weak_ptr;
 
+
 export class Student : public Person, public std::enable_shared_from_this<Student> //传递智能指针需要
 {
 public:

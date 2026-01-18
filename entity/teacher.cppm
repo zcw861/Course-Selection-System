@@ -34,6 +34,7 @@ public:
     //
     bool hasId(string id);
 
+
 private:
 
     vector<weak_ptr<Course>> _courses;

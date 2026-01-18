@@ -20,6 +20,7 @@ using std::vector;
 using std::print;
 
 
+
 export class Course: public std::enable_shared_from_this<Course>
 {
 public:
