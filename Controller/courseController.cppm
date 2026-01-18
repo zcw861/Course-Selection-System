@@ -7,21 +7,23 @@
 //          [v0.1.1] 周城伟 3269038743@qq.com   2026-01-18 13:23:11
 //          *使用数据层接口，通过单例模式实现数据持久化
 
+//          [v0.1.2] 周城伟 3269038743@qq.com   2026-01-18 23:30:46
+//          *注释了老师绑定课程的函数
+
 export module cs:controller.course;
 
 import std;
-import :entity.teacher;
-import :entity.course;
-import :entity.secretary;
-import :database.course;
-import :database.teacher;
+import :entity;
+import :database;
+
+using std::string;
 
 
 export class CourseController {
 public:
-    void initializeCourse();
-    void createCourse(string name,string id, double credit, double capacity, string time = "0", string location = "0");
-    bool attributeTeacher(const string &teacherId, const string &courseId);
+    void initializeCourse();    //初始化课程表
+    void createCourse(string name,string id, double credit, int capacity, string time = "0", string location = "0");    //用于创建课程
+    bool attributeTeacher(const string &teacherId, const string &courseId);     //用于分配教师
 };
 
 
@@ -29,13 +31,14 @@ void CourseController::initializeCourse() {
     CourseDatabase::singleton().saveCourse(std::make_shared<Course> ("计算机组成原理","CS101",4,60,"0","0"));
     CourseDatabase::singleton().saveCourse(std::make_shared<Course> ("计算机网络","CS102",4,70,"0","0"));
     CourseDatabase::singleton().saveCourse(std::make_shared<Course> ("数据结构","CS103",5,65,"0","0"));
-    CourseDatabase::singleton().saveCourse(std::make_shared<Course> ("深入理解计算机","CS104",5,70,"0","0"));
+    CourseDatabase::singleton().saveCourse(std::make_shared<Course> ("深入理解计算机系统","CS104",5,70,"0","0"));
     CourseDatabase::singleton().saveCourse(std::make_shared<Course> ("软件构建与实现","CS105",5,70,"0","0"));
 }
 
-void CourseController::createCourse(string name, string id, double credit,double capacity, string time, string location) {
+void CourseController::createCourse(string name, string id, double credit,int capacity, string time, string location) {
 
     auto course = std::make_shared<Course>(name, id, credit, capacity, time, location);
+    // 通过数据层接口保存课程
     CourseDatabase::singleton().saveCourse(course);
 }
 
@@ -52,7 +55,7 @@ bool CourseController::attributeTeacher(
     if (!CourseDatabase::singleton().findCourseById(courseId, course))
         return false;
 
-    teacher->assignCourse(course);
+    //teacher->assignCourse(course);
     return true;
 }
 

@@ -10,14 +10,9 @@
 export module cs:controller.score;
 
 import std;
-import :entity.teacher;
-import :entity.student;
-import :entity.secretary;
-import :entity.score;
+import :entity;
+import :database;
 
-import :database.student;
-import :database.score;
-import :database.course;
 
 using std::string;
 using std::shared_ptr;
@@ -25,7 +20,9 @@ using std::weak_ptr;
 
 export class ScoreController {
 public:
+    //记录学生成绩
     bool gradeStudent(string studentId, string courseId, double grade);
+    //得到学生成绩单
     std::vector<weak_ptr<Score>> getStudentTranscript(const string& studentId) const;
 };
 
@@ -64,7 +61,7 @@ bool ScoreController::gradeStudent(
         grade
     );
 
-    // 只负责协调，存储交给数据库
+    //存储交给数据库
     return ScoreDatabase::singleton().saveScore(*score);
 }
 
