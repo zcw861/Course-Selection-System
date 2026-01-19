@@ -5,10 +5,15 @@
 
 //     [v0.1.2] 何志远 3270883879@qq.com   2026-01-17 15:42:41
 //         * 更改代码结构，连接PostgreSQL数据库，实现具体函数功能
+
+module;
+#include "pqxx/pqxx"
+
 export module cs:database.secretary;
-import <pqxx/pqxx>;    //PostgreSQL C++客户端库
+
 import std;
 import :entity;
+
 
 //教学秘书数据库操作类
 export class SecretaryDatabase {

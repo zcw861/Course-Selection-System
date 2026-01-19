@@ -6,11 +6,15 @@
 
 //     [v0.1.2] 何志远 3270883879@qq.com   2026-01-17 14:34:18
 //         * 更改代码结构，连接postgresql数据库，，实现具体函数实现
-
+//     [v0.1.2] 何志远 3270883879@qq.com   2026-01-19 12:54:33
+//         * 更改为全局模块
 //定义课程数据库模块
+
+module;
+#include "pqxx/pqxx"       //PostgreSQL C++客户端库
+
 export module cs:database.course;
 
-import <pqxx/pqxx>;    //PostgreSQL C++客户端库
 import std;
 import :entity;
 

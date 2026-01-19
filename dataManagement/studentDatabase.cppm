@@ -6,12 +6,17 @@
 //     [v0.1.2] 何志远 3270883879@qq.com   2026-01-17 16:36:40
 //         * 更改代码结构，连接PostgreSQL数据库，数据类基本实现
 
+module;
+#include "pqxx/pqxx"
+
 export module cs:database.student;
 
-import <pqxx/pqxx>;        //PostgreSQL C++客户端库
+
 import std;
 import :entity;
 import :database.course;
+
+
 //学生数据库操作类
 export class StudentDatabase {
 private:
