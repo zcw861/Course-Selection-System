@@ -14,7 +14,8 @@ export module cs:controller.course;
 
 import std;
 import :entity;
-import :database;
+import :database.course;
+import :database.teacher;
 
 using std::string;
 

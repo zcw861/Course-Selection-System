@@ -45,6 +45,10 @@ public:
     bool hasId(string id);
     //给课程添加老师
     bool addTeacher(shared_ptr<Teacher> teacher);
+    //获取已选人数
+    int getEnrolledCount() const;
+    //获取容量
+    int getCapacity() const;
 
 private:
     string m_courseId;
@@ -117,5 +121,11 @@ bool Course::modifyTL(string time, string location)
     return true;
 }
 
+int Course::getEnrolledCount() const {
+    return static_cast<int>(_student.size());
+}
 
+int Course::getCapacity() const {
+    return m_capacity;
+}
 

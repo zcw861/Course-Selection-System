@@ -14,7 +14,8 @@ export module cs:controller.enrollment;
 
 import std;
 import :entity;
-import :database;
+import :database.course;
+import :database.student;
 
 using std::string;
 using std::print;
@@ -55,16 +56,18 @@ bool EnrollmentController::enrollCourse(const string &studentId, const string &c
 
 
     //检查课程容量,从数据库重新获取课程信息以确保容量是最新的
-    auto freshCourse = std::make_shared<Course>("", "", 0.0, 0, "", "");
-    if (!CourseDatabase::singleton().findCourseById(courseId, freshCourse)) {
-        print("获取课程最新信息失败。\n");
-        return false;
-    }
-    auto enrolledCount = freshCourse->getEnrolledCount(); //假设getEnrolledCount也能从数据库计算
-    if (enrolledCount >= freshCourse->getCapacity()) {
-        print("课程 {} 容量已满，选课失败！\n", freshCourse->infoName());
-        return false;
-    }
+    std::shared_ptr<Course> freshCourse;
+        if (!CourseDatabase::singleton().findCourseById(courseId, freshCourse)) {
+            print("获取课程最新信息失败。\n");
+            return false;
+        }
+    vector<shared_ptr<Course>> enrolledCourses;
+    StudentDatabase::singleton().findSchedule(studentId, enrolledCourses);
+    // 简单检查：如果有课程信息，检查容量
+    if (freshCourse->getEnrolledCount() >= freshCourse->getCapacity()) {
+           print("课程 {} 容量已满，选课失败！\n", freshCourse->infoName());
+           return false;
+       }
 
     //执行选课,更新内存中的course对象
     course->acceptEnrollment(student);

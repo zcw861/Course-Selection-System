@@ -12,6 +12,7 @@ using std::weak_ptr;
 using std::string;
 using std::print;
 using std::string;
+using std::shared_ptr;
 
 
 class Course;

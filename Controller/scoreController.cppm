@@ -11,12 +11,14 @@ export module cs:controller.score;
 
 import std;
 import :entity;
-import :database;
-
+import :database.score;
+import :database.course;
+import :database.student;
 
 using std::string;
 using std::shared_ptr;
 using std::weak_ptr;
+using std::vector;
 
 export class ScoreController {
 public:

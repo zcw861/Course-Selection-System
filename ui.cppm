@@ -216,7 +216,7 @@ void UI::showStudentMenu()
         //查看成绩单
             case '4':
             {
-                auto result = scoreController.getStudentTranscript();
+                auto result = scoreController.getStudentTranscript(sid);
 
                 if (result.empty())
                 {
